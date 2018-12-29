@@ -44,7 +44,7 @@ class Shift:
         else:
             event = {
                 'summary': 'Work',
-                'location': '1234 Target road',  # the address of the store you work at
+                'location': '5500 Grossmont Center Dr #1, La Mesa, CA 91942',  # the address of the store you work at
                 'description': self.position,  # the position you're working
                 'start': {
                     'dateTime': now
@@ -60,13 +60,13 @@ class Shift:
 # you need a google chrome webdriver for this to work, and you need to specify its location below
 # download it online and put one where this is pointing or wherever you feel like it just change the destination
 
-chromeDriver = 'C:\\Program Files (x86)\\Google\\Chrome\\chromedriver.exe'
+chromeDriver = 'chromedriver.exe'
 browser = webdriver.Chrome(chromeDriver)
 browser.get('http://wss.target.com/selfservice')
 username = browser.find_element_by_id("loginID")
 password = browser.find_element_by_id("pass")
-username.send_keys("XXXXXXXXXX")  # your username in the quotes
-password.send_keys("Hunter2")  # your password in the quotes
+username.send_keys("70097019")  # your username in the quotes
+password.send_keys("!brother_2")  # your password in the quotes
 login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
 login_attempt.submit()
 time.sleep(7)  # the sleep dictates how many seconds to wait before trying to proceed
@@ -85,11 +85,11 @@ answer = browser.find_element_by_id("answer0")
 # then do "if "pet" send_keys "max"
 # sorry for the length of this explanation but this is the sloppiest part. promise <3
 if "person" in browser.page_source:
-    answer.send_keys("brother")
+    answer.send_keys("mom")
 elif "car" in browser.page_source:
-    answer.send_keys("mustangGT")
+    answer.send_keys("camero")
 else:
-    answer.send_keys("max")  # the else is the last question and doesn't even check for the question, just send the last
+    answer.send_keys("paws")  # the else is the last question and doesn't even check for the question, just send the last
     # answer
 submit = browser.find_element_by_id("submit-button")
 submit.click()
@@ -102,6 +102,26 @@ if not creds or creds.invalid:
     flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
     creds = tools.run_flow(flow, store)
 service = build('calendar', 'v3', http=creds.authorize(Http()))
+
+for x in range(2, 9):
+    # this loop cycles through the week and assembles your shift information and creates the event
+    days = browser.find_element_by_xpath("//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[1]/td["
+                                         + str(x) + "]")
+    shift = browser.find_element_by_xpath("//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[3]/tbody/tr[3]/td["
+                                          + str(x) + "]")
+    if not shift.text.strip():
+        continue
+    shift_info = (days.text + '\n' + shift.text)
+
+    workday = Shift(shift_info.splitlines()[0],
+                    datetime.strptime(shift_info.splitlines()[1], "%m/%d/%y").strftime("%Y-%m-%d"),
+                    shift_info.splitlines()[2],
+                    shift_info.splitlines()[3].split('-')[0].strip(),
+                    shift_info.splitlines()[3].split('-')[1].strip())
+    workday.make_event()
+
+next = browser.find_element_by_xpath("//*[@id='page_content']/table[1]/tbody/tr[1]/td/table[2]/tbody/tr[1]/td/div/a[2]")
+next.click()
 
 for x in range(2, 9):
     # this loop cycles through the week and assembles your shift information and creates the event
