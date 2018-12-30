@@ -65,8 +65,8 @@ browser = webdriver.Chrome(chromeDriver)
 browser.get('http://wss.target.com/selfservice')
 username = browser.find_element_by_id("loginID")
 password = browser.find_element_by_id("pass")
-username.send_keys("70097019")  # your username in the quotes
-password.send_keys("!brother_2")  # your password in the quotes
+username.send_keys("0000000000")  # your username in the quotes
+password.send_keys("hunter2")  # your password in the quotes
 login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
 login_attempt.submit()
 time.sleep(7)  # the sleep dictates how many seconds to wait before trying to proceed
@@ -85,11 +85,11 @@ answer = browser.find_element_by_id("answer0")
 # then do "if "pet" send_keys "max"
 # sorry for the length of this explanation but this is the sloppiest part. promise <3
 if "person" in browser.page_source:
-    answer.send_keys("mom")
+    answer.send_keys("brother")
 elif "car" in browser.page_source:
-    answer.send_keys("camero")
+    answer.send_keys("tesla")
 else:
-    answer.send_keys("paws")  # the else is the last question and doesn't even check for the question, just send the last
+    answer.send_keys("max")  # the else is the last question and doesn't even check for the question, just send the last
     # answer
 submit = browser.find_element_by_id("submit-button")
 submit.click()
