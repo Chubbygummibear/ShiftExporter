@@ -44,7 +44,7 @@ class Shift:
         else:
             event = {
                 'summary': 'Work',
-                'location': '5500 Grossmont Center Dr #1, La Mesa, CA 91942',  # the address of the store you work at
+                'location': '1234 Target Town',  # the address of the store you work at
                 'description': self.position,  # the position you're working
                 'start': {
                     'dateTime': now
